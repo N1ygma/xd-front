@@ -1,0 +1,58 @@
+// 使用
+.app-page{
+  animation myfirst 0.5s
+  // -webkit-animation myfirst 0.5s
+}
+.vcontent{
+  animation vcontent 0.5s!important
+}
+@keyframes myfirst
+{
+from {
+ left: 100%;
+ }
+to {
+  left: 0;
+ }
+}
+
+@-webkit-keyframes myfirst /* Safari 和 Chrome */
+{
+from {
+  left: 100%;
+ }
+to {
+  left: 0;
+ }
+}
+
+
+@keyframes vcontent
+{
+from {
+ left: 100%;
+ }
+to {
+  left: 0;
+ }
+}
+
+@-webkit-keyframes vcontent /* Safari 和 Chrome */
+{
+from {
+  left: 100%;
+ }
+to {
+  left: 0;
+ }
+}
+
+@-webkit-keyframes change /* Safari 和 Chrome */
+{
+from {
+  opacity: 0;
+ }
+to {
+  opacity: 1;
+ }
+}

@@ -1,0 +1,54 @@
+$basecolor = #3F51B5 // 主题色
+// $basecolor = #e83632 // 主题色
+$headercolor = #303F9F  // header主题色
+$bgcolor = #FFFFFF // 背景色
+$backcolor = #f8f8f8
+$iconcolor = #757575 // 图标色
+$fontcolor = #212121 //字体色
+$fontlesscolor = #757575 // 二级字体色
+$infofontcolor = #BDBDBD // 三级字体色
+$elsecolor = #607D8B // 预留色
+$errcolor = #D32F2F // 危险色
+$warncolor = #FFA000 // 警告色
+$successcolor = #4CAF50 // 成功色
+$headerheight = 50px
+$toastbgcolor = rgba(0,0,0,0.7)
+$maskColor = rgba(0,0,0,0.8)
+$proiconcolor = #f30213
+
+body{
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+}
+// basestyle
+a,p,span{
+    font-size 14px
+    color $fontcolor
+    text-decoration none
+}
+li{
+    list-style none
+}
+*{
+    margin 0
+    padding 0
+}
+button{
+    position relative
+    width 80%
+    border 0
+    background $basecolor
+    color #ffffff
+    height 40px
+    cursor pointer
+    line-height 40px
+    border-radius 5px
+    outline none
+}
+button:active{
+    background $headercolor
+    color $infofontcolor 
+    border-radius 5px
+    border 1px solid #fff
+    font-size 14px
+    box-shadow 1px 1px 1px #222
+}
