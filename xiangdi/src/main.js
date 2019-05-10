@@ -3,7 +3,8 @@
 import Vue from 'vue';
 // import Vconsole from 'vconsole';
 import { LoadingPlugin } from 'vux';
-
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.styl';
 import '@/assets/css/keyframes.styl';
 import '@/assets/icon/iconfont.css';
@@ -14,7 +15,7 @@ import router from './router';
 import Utils from './utils/util.js';
 
 Vue.use(LoadingPlugin);
-
+Vue.use(ElementUI);
 // const vConsole = new Vconsole();
 // export default vConsole;
 Vue.config.productionTip = false;

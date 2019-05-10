@@ -1,4 +1,4 @@
-const list=[
+const list = [
   {
     icon: 'iconfont icon-shouye',
     path: '1',
@@ -7,42 +7,23 @@ const list=[
   {
     icon: 'iconfont icon-gengduo4',
     path: '1',
-    title: '分类页',
+    title: '歌手资料',
   },
   {
     icon: 'iconfont icon-gouwuchekong',
     path: '1',
-    title: '购物车',
+    title: '文章',
   },
   {
     icon: 'iconfont icon-webduanmobancaozuo_renyuanxinxi',
     path: '1',
-    title: '个人中心',
+    title: '照片墙',
   },
-   {
+  {
     icon: 'iconfont icon-gengduo4',
     path: '1',
-    title: '分类页',
+    title: '歌曲试听',
   },
-  {
-    icon: 'iconfont icon-gouwuchekong',
-    path: '1',
-    title: '购物车',
-  },
-  {
-    icon: 'iconfont icon-webduanmobancaozuo_renyuanxinxi',
-    path: '1',
-    title: '个人中心',
-  },
-  {
-    icon: 'iconfont icon-gouwuchekong',
-    path: '1',
-    title: '购物车',
-  },
-  {
-    icon: 'iconfont icon-webduanmobancaozuo_renyuanxinxi',
-    path: '1',
-    title: '个人中心',
-  },
-]
-export default list
+
+];
+export default list;

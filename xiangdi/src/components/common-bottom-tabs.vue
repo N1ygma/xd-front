@@ -6,7 +6,7 @@
       :key= 'index'
       @click="chooseOne(index)">
         <span>
-        <i :class="item.icon"></i>
+        <!-- <i :class="item.icon"></i> -->
         </span>
         <p>{{item.title}}</p>
       </li>
@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       selected: 0,
-      
+
     };
   },
   methods: {
@@ -40,17 +40,20 @@ export default {
 </script>
 <style lang="stylus">
 .common-bottom-tabs{
-  width 100%
+  margin 0 auto
+  // width 100%
   height 40px
   // border-bottom 1px solid #ccc
-  background-color $bgcolor
+  // background-color $bgcolor
   ul{
     display flex
     height 100%
     justify-content flex-start
     flex-flow row nowrap
+    padding 0 80px
     li{
       // padding-left 45px;
+      max-width 120px
       flex 1
       cursor pointer
       height 100%
@@ -76,7 +79,7 @@ export default {
         text-align left
         flex-grow 1
         padding-left 6px
-        color $maskColor
+        color #ccc
         top 3px
         display block
         position relative
@@ -86,22 +89,24 @@ export default {
       }
     }
     li:active{
-      background-color $infofontcolor
+      // background-color $infofontcolor
 
     }
     li:hover{
-      background-color $infofontcolor
+      // background-color $infofontcolor
+      p{
+        color #df846c
+      }
     }
     .selected-style{
-      background-color #efefef
+      // background-color #efefef
       height 39px
-      border-bottom 3px solid $headercolor
-
+      // border-bottom 2px solid $headercolor
       i{
         color $basecolor
       }
       p{
-        color $basecolor
+        color #df846c
       }
     }
   }
