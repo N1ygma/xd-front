@@ -1,11 +1,25 @@
 <template>
   <div class="home-page app-page">
-    <!-- main header -->
+    <div class="home-header-box-father">
+      <!-- main header -->
     <div class="home-header-box">
       <div class="header-box-header">
         <div  class="img-box">
-          <img src="../../assets/imgs/a8773912b31bb051439bc5b33a7adab44bede0ea.jpg" alt="头像">
+          <img @mouseover="ImgMouseOver()"  src="../../assets/imgs/a8773912b31bb051439bc5b33a7adab44bede0ea.jpg" alt="头像">
         </div>
+        <!--  -->
+        <!-- music ctrl -->
+      <div :class="isShowPlayer?'music-play-box player-box-fa':'music-play-box-no player-box-fa'">
+        <p class="title-box">{{musicSrc.title}}</p>
+        <div  @mouseout="ImgMouseOut()" class="player-box">
+          <p @click="onAMusic(musicSrc.index)"><i class="iconfont icon-shangyishou"></i></p>
+          <p @click="pausePlayer()" id="pause"><i :class="!playing?'iconfont icon-play-round':'iconfont icon-zantingtingzhi'"></i></p>
+          <p @click="nextMusic(musicSrc.index)"><i class="iconfont icon-xiayishou1"></i></p>
+        </div>
+        <video controls='controls' style="height:0" name="media" id="video" autoplay="autoplay">
+         <source :src="musicSrc.src" type="audio/mpeg" />
+        </video>
+      </div>
       </div>
       <!-- header-body -->
       <div class="header-box-body">
@@ -22,6 +36,8 @@
         </div>
       </div>
     </div>
+    </div>
+
     <!-- 首页板块 -->
     <main-page v-if="tab==0"/>
     <!-- singer detail  歌手简介-->
@@ -30,7 +46,7 @@
     <div  v-if="tab==2" class="body-box vcontent">
       <div class="main-body-box">
     <!-- main body content 文章板块-->
-        <div   class="cards-box">
+        <div class="cards-box">
           <card v-for="(item,i) in list1" :key='i' :info="item"/>
         </div>
         <div class="page-ctrl">
@@ -41,6 +57,10 @@
         </div>
       </div>
     </div>
+    <!-- imgs wall 照片墙 -->
+    <imgs-wall v-if="tab==3"/>
+    <!-- 音乐试听 -->
+    <musics-page v-if="tab==4"/>
     <!-- main footer -->
     <div class="main-footer-box">
       <p>
@@ -53,13 +73,32 @@
        element-loading-spinner="el-icon-loading"
        element-loading-background="rgba(0,0,0, 0.9)"
        class="mask-box">
-
+    </div>
+    <div class="circle-ctrl-box">
+      <div @click="showCtrl()" class="plus-circle">
+        <i class="iconfont icon-jia "></i>
+      </div>
+      <div v-if="isShowCtrl" class="ctrl-icon vcontent">
+        <ul>
+          <li @click="onAMusic(musicSrc.index)">
+            <i class="iconfont icon-shangyishou"></i>
+          </li>
+          <li @click="pausePlayer()">
+            <i :class="!playing?'iconfont icon-play-round':'iconfont icon-zantingtingzhi'"></i>
+          </li>
+          <li  @click="nextMusic(musicSrc.index)">
+            <i class="iconfont icon-xiayishou1"></i>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 // eslint-disable-next-line import/no-unresolved
+import MusicsPage from '../musicsPage/index'
+import ImgsWall from '../imgsWall/index';
 import CardsApi from '@/api/titleCard';
 import MainPage from '../main/index';
 import SingerDetail from '../singerInfo/index';
@@ -76,12 +115,41 @@ export default {
     Card,
     SingerDetail,
     MainPage,
+    ImgsWall,
+    MusicsPage
   },
   data() {
     return {
+      isShowCtrl:false,
+      musicSrc:{
+        title:'这是第一首',
+        src:'http://106.14.175.12:8090/music/1.mp3',
+        index:0
+      },
+      isShowPlayer: false,
+      playing:false,
       tab: 0,
       isFocus: false,
       loading: false,
+      musicArr:[
+        {
+          title:'这是第一首',
+          src:'http://106.14.175.12:8090/music/1.mp3',
+          index:0
+        },
+        {
+
+          title:'这是第二首歌',
+          src:'http://106.14.175.12:8090/music/2.mp3',
+          index:1
+        },
+        {
+          title:'这是第三首歌',
+          src:'http://106.14.175.12:8090/music/1.mp3',
+          index:2
+        }
+
+      ],
       list1: [],
       list: [
       ],
@@ -94,6 +162,51 @@ export default {
   methods: {
     feacthPage() {
       this.list = TabsList; // tabs list
+    },
+    showCtrl(){
+      this.isShowCtrl=!this.isShowCtrl
+    },
+    pausePlayer() {
+      const pause = document.getElementById('video');
+      if (pause.paused == true) {
+        pause.play();
+        this.playing=true
+      } else {
+        pause.pause();
+        this.playing=false
+      }
+    },
+    onAMusic(i){
+      if(i>0){
+        this.musicSrc=this.musicArr[i-1]
+        const pause = document.getElementById('video');
+        pause.load()
+      }
+      
+    },
+    nextMusic(i){
+      if(i<this.musicArr.length){
+        this.musicSrc=this.musicArr[i+1]
+        const pause = document.getElementById('video');
+        pause.load()
+      }
+    },
+    ImgMouseOver() {
+      if(this.isShowPlayer==true){
+        this.isShowPlayer = false;
+
+      }else{
+        this.isShowPlayer = true;
+
+      }
+      // setTimeout(() => {
+      //   this.isShowPlayer=false
+      // }, 6000);
+    },
+    ImgMouseOut() {
+      setTimeout(() => {
+        this.isShowPlayer = false;
+      }, 10000);
     },
     getCards() {
       CardsApi.CardsApi().then((res) => {
@@ -110,7 +223,11 @@ export default {
     },
     tabEmit(e) {
       console.log(e);
-      this.tab = parseInt(e);
+      this.loading = true;
+      setTimeout(() => {
+        this.tab = parseInt(e);
+        this.loading = false;
+      }, 1000);
     },
     inputFocus() {
       this.isFocus = true;
@@ -132,21 +249,66 @@ borderRadius=70px
   height 100%
   top 0px
   left 0px
-  .home-header-box{
+  .home-header-box-father{
+    width 100%
+    background-color #333
+    .home-header-box{
+    width bodywidth
+    margin 0 auto
     background-color #333
     display flex
     flex-direction column
     .header-box-header{
+      cursor pointer
+      height 144px
       padding 5px 0 5px 0
+      display flex
+      flex-direction row
       .img-box{
-        width imgWidth
-        height imgWidth
-        border-radius borderRadius
+        flex-grow 1
         overflow hidden
-        margin 0 auto
         img{
           width 100%
+          width imgWidth
+          height imgWidth
+          border-radius borderRadius
         }
+      }
+      .player-box-fa{
+        width 30%
+        .title-box{
+          height 50px
+          line-height 60px
+          font-size 20px
+          color #fff
+        }
+        .player-box{
+          padding 0 20px
+          height 100%
+          line-height 84px
+          display flex
+          flex-direction row
+          background-color #333
+          overflow hidden
+          p{
+            flex-grow 1
+            i{
+              font-size 26px
+              color #fff
+            }
+          }
+        }
+      }
+      .music-play-box{
+        width 30%
+        overflow hidden
+        transition width 0.5s
+
+      }
+      .music-play-box-no{
+        width 0
+        overflow hidden
+        transition width 0.5s
       }
     }
     .header-box-body{
@@ -177,6 +339,8 @@ borderRadius=70px
       }
     }
   }
+  }
+
   .body-box{
     background-color #ddd
     .main-body-box{
@@ -252,6 +416,45 @@ borderRadius=70px
     top 0px
     left 0
     bottom 0px
+  }
+  .circle-ctrl-box{
+    position fixed
+    width 50px
+    height 50px
+    bottom 100px
+    right 50px
+    border-radius 25px
+    background-color #333
+    .plus-circle{
+      cursor pointer
+      i{
+        font-size 17px
+        color #fff
+        height 50px
+        line-height 50px
+      }
+    }
+    .ctrl-icon{
+      position relative
+      top -180px
+      ul{
+        li{
+          height 30px
+          line-height 30px
+          width 100%
+          margin-top 10px
+          border-radius 5px
+          background-color #ccc
+          cursor pointer
+          i{
+            font-size 15px
+          }
+        }
+        li:hover{
+          background-color #aaa
+        }
+      }
+    }
   }
 }
 </style>
