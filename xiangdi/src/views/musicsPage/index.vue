@@ -49,19 +49,20 @@
 </template>
 <script>
 import { Message } from 'element-ui';
+
 export default {
   methods: {
-    next(){
-      let options={
-        message:'功能开发中......',
-        duration:1000,
-        center:true,
-        type:'warning'
-      }
-      Message(options)
-    }
+    next() {
+      const options = {
+        message: '功能开发中......',
+        duration: 1000,
+        center: true,
+        type: 'warning',
+      };
+      Message(options);
+    },
   },
-}
+};
 </script>
 <style lang="stylus">
 liheight=40px
@@ -75,7 +76,7 @@ liheight=40px
         height liheight
         line-height liheight
         span{
-          display flex 
+          display flex
           flex-direction row
           p{
             flex-grow 1
@@ -131,7 +132,7 @@ liheight=40px
       }
       // .col-header{
       //   span{
-          
+
       //   }
       // }
       // .value{

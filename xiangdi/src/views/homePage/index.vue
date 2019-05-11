@@ -46,7 +46,7 @@
     <div  v-if="tab==2" class="body-box vcontent">
       <div class="main-body-box">
     <!-- main body content 文章板块-->
-        <div class="cards-box">
+        <div @click="goDetail(item)" class="cards-box">
           <card v-for="(item,i) in list1" :key='i' :info="item"/>
         </div>
         <div class="page-ctrl">
@@ -97,7 +97,7 @@
 
 <script>
 // eslint-disable-next-line import/no-unresolved
-import MusicsPage from '../musicsPage/index'
+import MusicsPage from '../musicsPage/index';
 import ImgsWall from '../imgsWall/index';
 import CardsApi from '@/api/titleCard';
 import MainPage from '../main/index';
@@ -116,38 +116,38 @@ export default {
     SingerDetail,
     MainPage,
     ImgsWall,
-    MusicsPage
+    MusicsPage,
   },
   data() {
     return {
-      isShowCtrl:false,
-      musicSrc:{
-        title:'这是第一首',
-        src:'http://106.14.175.12:8090/music/1.mp3',
-        index:0
+      isShowCtrl: false,
+      musicSrc: {
+        title: '这是第一首',
+        src: 'http://106.14.175.12:8090/music/1.mp3',
+        index: 0,
       },
       isShowPlayer: false,
-      playing:false,
+      playing: false,
       tab: 0,
       isFocus: false,
       loading: false,
-      musicArr:[
+      musicArr: [
         {
-          title:'这是第一首',
-          src:'http://106.14.175.12:8090/music/1.mp3',
-          index:0
+          title: '这是第一首',
+          src: 'http://106.14.175.12:8090/music/1.mp3',
+          index: 0,
         },
         {
 
-          title:'这是第二首歌',
-          src:'http://106.14.175.12:8090/music/2.mp3',
-          index:1
+          title: '这是第二首歌',
+          src: 'http://106.14.175.12:8090/music/2.mp3',
+          index: 1,
         },
         {
-          title:'这是第三首歌',
-          src:'http://106.14.175.12:8090/music/1.mp3',
-          index:2
-        }
+          title: '这是第三首歌',
+          src: 'http://106.14.175.12:8090/music/1.mp3',
+          index: 2,
+        },
 
       ],
       list1: [],
@@ -163,41 +163,41 @@ export default {
     feacthPage() {
       this.list = TabsList; // tabs list
     },
-    showCtrl(){
-      this.isShowCtrl=!this.isShowCtrl
+    showCtrl() {
+      this.isShowCtrl = !this.isShowCtrl;
+    },
+    goDetail() {
+      this.$router.zyPagePush('Detail');
     },
     pausePlayer() {
       const pause = document.getElementById('video');
       if (pause.paused == true) {
         pause.play();
-        this.playing=true
+        this.playing = true;
       } else {
         pause.pause();
-        this.playing=false
+        this.playing = false;
       }
     },
-    onAMusic(i){
-      if(i>0){
-        this.musicSrc=this.musicArr[i-1]
+    onAMusic(i) {
+      if (i > 0) {
+        this.musicSrc = this.musicArr[i - 1];
         const pause = document.getElementById('video');
-        pause.load()
+        pause.load();
       }
-      
     },
-    nextMusic(i){
-      if(i<this.musicArr.length){
-        this.musicSrc=this.musicArr[i+1]
+    nextMusic(i) {
+      if (i < this.musicArr.length) {
+        this.musicSrc = this.musicArr[i + 1];
         const pause = document.getElementById('video');
-        pause.load()
+        pause.load();
       }
     },
     ImgMouseOver() {
-      if(this.isShowPlayer==true){
+      if (this.isShowPlayer == true) {
         this.isShowPlayer = false;
-
-      }else{
+      } else {
         this.isShowPlayer = true;
-
       }
       // setTimeout(() => {
       //   this.isShowPlayer=false

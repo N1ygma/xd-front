@@ -20,10 +20,10 @@ export default new Router({
     //   name: 'Main',
     //   component: Main,
     // },
-    // {
-    //   path: '/Detail',
-    //   name: 'Detail',
-    //   component: Detail,
-    // },
+    {
+      path: '/Detail',
+      name: 'Detail',
+      component: Detail,
+    },
   ],
 });
