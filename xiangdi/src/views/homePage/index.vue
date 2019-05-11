@@ -46,8 +46,8 @@
     <div  v-if="tab==2" class="body-box vcontent">
       <div class="main-body-box">
     <!-- main body content 文章板块-->
-        <div @click="goDetail(item)" class="cards-box">
-          <card v-for="(item,i) in list1" :key='i' :info="item"/>
+        <div  class="cards-box">
+          <card v-for="(item,i) in list1" :key='i' :info="item" @click.native="goDetail(item)"/>
         </div>
         <div class="page-ctrl">
           <div class="page-ctrl-icon">
@@ -162,12 +162,21 @@ export default {
   methods: {
     feacthPage() {
       this.list = TabsList; // tabs list
+      console.log(this.$route.params.tab)
+      if(this.$route.params.tab){
+        this.tab=this.$route.params.tab
+      }
     },
     showCtrl() {
       this.isShowCtrl = !this.isShowCtrl;
     },
-    goDetail() {
-      this.$router.zyPagePush('Detail');
+    goDetail(item) {
+      this.$router.push({
+        name:'Detail',
+        params:{
+          article:item
+        }
+      })
     },
     pausePlayer() {
       const pause = document.getElementById('video');
