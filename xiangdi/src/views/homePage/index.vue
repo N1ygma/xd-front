@@ -10,14 +10,16 @@
         <!--  -->
         <!-- music ctrl -->
       <div :class="isShowPlayer?'music-play-box player-box-fa':'music-play-box-no player-box-fa'">
-        <p class="title-box">{{musicSrc.title}}</p>
+        <p class="title-box">{{musicSrc.name}}</p>
+        <!-- 控制器模块 -->
         <div  @mouseout="ImgMouseOut()" class="player-box">
           <p @click="onAMusic(musicSrc.index)"><i class="iconfont icon-shangyishou"></i></p>
           <p @click="pausePlayer()" id="pause"><i :class="!playing?'iconfont icon-play-round':'iconfont icon-zantingtingzhi'"></i></p>
           <p @click="nextMusic(musicSrc.index)"><i class="iconfont icon-xiayishou1"></i></p>
         </div>
+        <!-- 多媒体标签 -->
         <video controls='controls' style="height:0" name="media" id="video" autoplay="autoplay">
-         <source :src="musicSrc.src" type="audio/mpeg" />
+         <source :src="musicSrc.address" type="audio/mpeg" />
         </video>
       </div>
       </div>
@@ -32,7 +34,10 @@
         <div class="search-box">
           <input
           @focus="inputFocus()"
-          @blur="inputBlur()" :class="isFocus ? 'focus-input': ''" type="text" placeholder="search">
+          @blur="inputBlur()" :class="isFocus ? 'focus-input': ''" v-model="searchContent" type="text" placeholder="search">
+        </div>
+        <div class="btn-box">
+        <button @click="searchElse()" v-if="showButton" class="search-btn">search</button>
         </div>
       </div>
     </div>
@@ -43,7 +48,12 @@
     <!-- singer detail  歌手简介-->
     <singer-detail v-if="tab==1"/>
     <!-- main body -->
-    <div  v-if="tab==2" class="body-box vcontent">
+    <div 
+       v-loading="loading1"
+       element-loading-text="拼命加载中"
+       element-loading-spinner="el-icon-loading"
+       element-loading-background="rgba(250,250,250, 0.8)"
+       v-if="tab==2" class="body-box vcontent">
       <div class="main-body-box">
     <!-- main body content 文章板块-->
         <div  class="cards-box">
@@ -96,6 +106,8 @@
 </template>
 
 <script>
+import Api from '@/api/xdApi'
+
 // eslint-disable-next-line import/no-unresolved
 import MusicsPage from '../musicsPage/index';
 import ImgsWall from '../imgsWall/index';
@@ -120,12 +132,11 @@ export default {
   },
   data() {
     return {
+      searchContent:'',
+      loading1:false,
+      showButton:false,
       isShowCtrl: false,
-      musicSrc: {
-        title: '这是第一首',
-        src: 'http://106.14.175.12:8090/music/1.mp3',
-        index: 0,
-      },
+
       isShowPlayer: false,
       playing: false,
       tab: 0,
@@ -145,10 +156,15 @@ export default {
         },
         {
           title: '这是第三首歌',
-          src: 'http://106.14.175.12:8090/music/1.mp3',
+          src: 'http://localhost:8090/music/Others/Taylor%20Swift%20-%20Beautiful%20Eyes.mp3',
           index: 2,
         },
+        {
+          title: '这是第三首歌',
+          src: 'http://localhost:8090/music/Others/Taylor%20Swift%20-%20Beautiful%20Eyes.mp3',
+          index: 2,
 
+        },
       ],
       list1: [],
       list: [
@@ -157,15 +173,56 @@ export default {
   },
   mounted() {
     this.feacthPage();
-    this.getCards();
+
+    this.loading1 = true;
+      this.getCards();
+      setTimeout(() => {
+        this.list1 = this.$store.getters.selectArList;
+        this.loading1 = false;
+      }, 2000);
+
+  },
+  beforeMount() {
+    
+  },
+  watch: {
+    'this.$store.getters.getSelectMusic':function(){
+      this.musicSrc=this.$store.getters.getSelectMusic
+    }
+  },
+  computed: {
+    musicSrc(){
+      debugger
+      return this.$store.getters.getSelectMusic
+      
+    }
+  },
+  activated() {
+    this.list1 = this.$store.getters.selectArList;
   },
   methods: {
     feacthPage() {
+      Api.getAllMusics().then(res=>{
+        console.log(res.data)
+        this.musicArr=res.data
+        this.musicArr.forEach((ele,index)=>{
+          ele.index=index
+        })
+        console.log(this.musicArr)
+        this.$store.commit('seSelectMusic',this.musicArr[0])
+        console.log('sasa',this.$store)
+        console.log(this.musicSrc)
+        // this.musicSrc=this.musicArr[0]
+        })
       this.list = TabsList; // tabs list
-      console.log(this.$route.params.tab)
+      // console.log(this.$route.params.tab)
       if(this.$route.params.tab){
         this.tab=this.$route.params.tab
       }
+      this.getCards()
+    },
+    searchElse(){
+
     },
     showCtrl() {
       this.isShowCtrl = !this.isShowCtrl;
@@ -178,6 +235,7 @@ export default {
         }
       })
     },
+    // 多媒体播放
     pausePlayer() {
       const pause = document.getElementById('video');
       if (pause.paused == true) {
@@ -188,29 +246,41 @@ export default {
         this.playing = false;
       }
     },
+    // 上一首
     onAMusic(i) {
+      i=i-1
       if (i > 0) {
-        this.musicSrc = this.musicArr[i - 1];
+        this.$store.commit('seSelectMusic',this.musicArr[i])
+        // this.musicSrc = this.musicArr[i - 1];
+        console.log(this.musicSrc)
         const pause = document.getElementById('video');
+        this.playing = true;
         pause.load();
+      }else{
+        alert('已经到第一首了')
       }
     },
+    // 下一首
     nextMusic(i) {
+      i=i+1
       if (i < this.musicArr.length) {
-        this.musicSrc = this.musicArr[i + 1];
+        // this.musicSrc = this.musicArr[i + 1];
+        this.$store.commit('seSelectMusic',this.musicArr[i])
+        console.log(this.musicSrc)
         const pause = document.getElementById('video');
+        this.playing = true;
         pause.load();
+      }else{
+        alert('已经是最后一首了')
       }
     },
+    // 播放器显示控制
     ImgMouseOver() {
       if (this.isShowPlayer == true) {
         this.isShowPlayer = false;
       } else {
         this.isShowPlayer = true;
       }
-      // setTimeout(() => {
-      //   this.isShowPlayer=false
-      // }, 6000);
     },
     ImgMouseOut() {
       setTimeout(() => {
@@ -218,14 +288,15 @@ export default {
       }, 10000);
     },
     getCards() {
-      CardsApi.CardsApi().then((res) => {
-        console.log(res);
-        this.list1 = res.arr;
-      });
+      Api.GetAllArticles().then(res=>{
+      //  this.list1 = res.data;
+       this.$store.commit('setArList',res.data)
+    })
+
     },
     goNext() {
       this.loading = true;
-      this.getCards();
+      // this.getCards();
       setTimeout(() => {
         this.loading = false;
       }, 2000);
@@ -240,9 +311,13 @@ export default {
     },
     inputFocus() {
       this.isFocus = true;
+      this.showButton=true
     },
     inputBlur() {
       this.isFocus = false;
+      setTimeout(() => {
+        this.showButton=false
+      }, 1000);
     },
   },
 };
@@ -288,6 +363,9 @@ borderRadius=70px
         .title-box{
           height 50px
           line-height 60px
+          white-space:nowrap; 
+          overflow:hidden; 
+          text-overflow:ellipsis;
           font-size 20px
           color #fff
         }
@@ -330,7 +408,10 @@ borderRadius=70px
     .header-box-footer{
       width 100%
       padding 10px 0 20px 0
+      display flex
+      flex-direction row
       .search-box{
+        flex-grow 1
         input{
           width 100px
           background-color #333
@@ -341,9 +422,21 @@ borderRadius=70px
           height 25px
           line-height 25px
           transition all 0.5s
+          float right
         }
         .focus-input{
           width 240px
+        }
+      }
+      .btn-box{
+        flex-grow 1
+        button{
+          float left
+          background none
+          border 1px solid #df846c
+          width 70px
+          height 25px
+          line-height 25px
         }
       }
     }
@@ -430,9 +523,10 @@ borderRadius=70px
     position fixed
     width 50px
     height 50px
-    bottom 100px
+    bottom 70px
     right 50px
     border-radius 25px
+    z-index 999
     background-color #333
     .plus-circle{
       cursor pointer

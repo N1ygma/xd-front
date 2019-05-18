@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div class="login-page app-page">
         <div class="common-header">
             <span @click="$router.zyPageBack()"><i class="iconfont icon-fanhui1"></i></span>
@@ -10,7 +10,7 @@
             <p>Full Palette colors below</p>
             <span @click="info()"><i class="circle">J</i> </span>
         </div>
-        <div class="login-box">
+        <div class="login-box">   
           <div class="id-box">
             <p>账号</p>
             <input v-model="userid" placeholder="请输入账号" type="text">

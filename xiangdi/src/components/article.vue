@@ -4,7 +4,7 @@
       <!-- title -->
       <div class="header-title">
         <span>{{info.title}}</span>
-        <span>{{info.date}}</span>
+        <span>{{info.time}}</span>
       </div>
       <!-- img box -->
       <div class="article-img-box">
@@ -15,7 +15,7 @@
       <!-- content box -->
       <div class="article-content-box">
         <p>
-          {{info.content}}
+          {{info.text}}
         </p>
       </div>
     </div>

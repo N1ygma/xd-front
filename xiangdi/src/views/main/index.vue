@@ -14,26 +14,26 @@
       </div>
       <div class="music-box">
         <p class="list-box">今日推荐</p>
-        <ul @click="next()">
-          <li :class="listIndex==i?'selected-music':''" @click="selectedMusic(i)" v-for="(item,i) in musics" :key='i'>
+        <ul>
+          <li :class="listIndex==i?'selected-music':''" @click="selectedMusic(item)" v-for="(item,i) in musics" :key='i'>
             <p>
-            {{item.title}}
+            {{item.name}}
             </p>
           </li>
         </ul>
       </div>
     </div>
     <!-- 新闻预览 -->
-    <div @click="next()" v-for="i in 8" :key='i' class="article-fa-box">
+    <div @click="next()" v-for="(item,i) in arList" :key='i' class="article-fa-box">
       <div class="article-box">
         <el-card class="box-card">
           <div  class="text-content">
             <div class="content-title">
-              泰勒·斯威夫特：乡村音乐中的真性情
+              {{item.title}}
             </div>
             <div class="content-body">
               <p>
-              2015年4月获第50届乡村音乐学院奖50周年里程碑奖 [13-14]  ；5月，成为2015福布斯全球权势女性榜上榜最年轻女性 [15-17]  。2016年登顶《福布斯》全球百大名人榜榜首 [18]  。
+              {{item.text}}
               <a @click="next()">（点击查看更多）</a>
               </p>
             </div>
@@ -45,12 +45,14 @@
   </div>
 </template>
 <script>
-import { Message } from 'element-ui';
+import Api from '@/api/xdApi'
 
+import { Message } from 'element-ui';
 export default {
   data() {
     return {
       listIndex: 0,
+      arList:[],
       item: [
         {
           src: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1557519033293&di=ab8499256f48fa39cdbbed0abc201d89&imgtype=0&src=http%3A%2F%2Fgss0.baidu.com%2F-fo3dSag_xI4khGko9WTAnF6hhy%2Fzhidao%2Fpic%2Fitem%2F5366d0160924ab183966e41b34fae6cd7b890bad.jpg',
@@ -66,37 +68,30 @@ export default {
         },
       ],
       musics: [
-        {
-          title: 'I Knew You Were Trouble',
-          src: '',
-        },
-        {
-          title: 'I Knew You Were Trouble',
-          src: '',
-        },
-        {
-          title: 'I Knew You Were Trouble',
-          src: '',
-        },
-        {
-          title: 'I Knew You Were Trouble',
-          src: '',
-        },
-        {
-          title: 'I Knew You Were Trouble',
-          src: '',
-        },
-        {
-          title: 'I Knew You Were Trouble',
-          src: '',
-        },
+        
 
       ],
     };
   },
+mounted() {
+  this.fetchPage()
+},
   methods: {
+    fetchPage(){
+      Api.GetAllArticles().then(res=>{
+      //  this.ar = res.data;
+      this.arList=res.data
+      //  this.$store.commit('setArList',res.data)
+    })
+    Api.getAllMusics().then(res=>{
+        this.musics=res.data
+         this.musics.forEach((ele,index)=>{
+          ele.index=index
+        })
+   })
+    },
     selectedMusic(i) {
-      this.listIndex = i;
+        this.$store.commit('seSelectMusic',i)
     },
      next(){
       let options={

@@ -75,8 +75,8 @@ mounted() {
   this.list=TabsList
   console.log(this.$route.params)
   this.title=this.$route.params.article.title
-  this.content=this.$route.params.article.content
-  this.date=this.$route.params.article.date
+  this.content=this.$route.params.article.text
+  this.date=this.$route.params.article.time
 },
 methods: {
    tabEmit(e) {

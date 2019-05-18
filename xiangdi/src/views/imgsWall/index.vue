@@ -2,7 +2,7 @@
   <div class="imgs-wall-box vcontent">
     <div class="imgs-wall-child-box">
       <div @click="selectedThis(item)" v-for="(item,i) in list" :key='i' class="img-box">
-          <img :src="item.imgSrc" alt="">
+          <img :src="item.address" alt="">
       </div>
     </div>
     <div @click="closeMask()" v-if="isMask" class="img-detail-box app-page">
@@ -13,8 +13,9 @@
   </div>
 </template>
 <script>
-import ImgsApi from '@/api/imgsApi'
-  ;
+import ImgsApi from '@/api/imgsApi';
+import Api from '@/api/xdApi'
+
 
 export default {
   data() {
@@ -29,20 +30,24 @@ export default {
   },
   methods: {
     selectedThis(item) {
-      this.selectedImg = item.imgSrc;
+      this.selectedImg = item.address;
       this.isMask = !this.isMask;
     },
     closeMask() {
       this.isMask = !this.isMask;
     },
     getImgs() {
-      const data = {
-        page: 1,
-        size: 100,
-      };
-      ImgsApi.GetImgs(data).then((res) => {
-        this.list = res.data;
-      });
+      Api.GetAllPics().then(res=>{
+        this.list=res.data
+      })
+      // const data = {
+      //   page: 1,
+      //   size: 100,
+      // };
+      // ImgsApi.GetImgs(data).then((res) => {
+      //   this.list = res.data;
+      // });
+
     },
   },
 };
@@ -63,14 +68,18 @@ export default {
      padding-bottom 30px
     .img-box{
       transition all 0.5s
-      border: solid 1px #ccc;
+      // border: solid 1px #ccc;
       border-radius: 4px;
       margin-bottom: 15px;
       cursor: pointer;
       box-shadow 2px 2px 2px #eee
-      padding: 15px;
+      // padding: 15px;
         img{
           width: 100%;
+          border: solid 1px #ccc;
+          border-radius: 4px;
+          box-shadow 2px 2px 2px #bbb
+
         }
     }
     .img-box:hover{
